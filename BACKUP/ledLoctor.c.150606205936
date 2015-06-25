@@ -1,0 +1,136 @@
+/**************************(C) COPYRIGHT emouse 2011***************************
+名称：main.c
+功能：模拟SPI程序测试
+作者：emouse
+时间：2011.1.11
+版本：1.0
+注意：无
+*******************************************************************************/
+#include <iom16v.h>
+#include <macros.h>
+  
+#define SetBit(Port,N)  (Port|=(1<<N))    //设置IO某一位
+#define ClrBit(Port,N)  (Port&=~(1<<N))   //清空IO某一位
+#define ReverBit(Port,N)  (Port^=(1<<N))   //取反IO某一位
+#define GetBit(Pin,N)   ((Pin>>N)&0x01)   //读取IO某一位
+/***************模拟SPI的相关宏定义********************/
+#define SPI1_Port PORTB     //设置使用的端口
+#define SPI1_DDR DDRB
+#define SPI1_PIN PINB
+#define SPI1_CS 0           //设置每个信号对应的引脚
+#define SPI1_MISO 3
+#define SPI1_MOSI 1
+#define SPI1_CLK 2
+#define SPI1_CS_H (SPI1_Port|=(1<<SPI1_CS))
+#define SPI1_CS_L (SPI1_Port&=~(1<<SPI1_CS))
+#define SPI1_GetMISO ((SPI1_PIN>>SPI1_MISO)&0x01)
+#define SPI1_MOSI_H (SPI1_Port|=(1<<SPI1_MOSI))
+#define SPI1_MOSI_L (SPI1_Port&=~(1<<SPI1_MOSI))
+#define SPI1_CLK_H (SPI1_Port|=(1<<SPI1_CLK))
+#define SPI1_CLK_L (SPI1_Port&=~(1<<SPI1_CLK))
+unsigned char spi_delay;    //设置信号的持续时间，相当于设置SPI的速度
+
+unsigned char guideMessage[8]={0,1,0,1,0,1,0,1};
+unsigned char idMessage[8]   ={0,0,0,0,0,0,0,1};
+unsigned char coordMessage[8]={0,0,0,0,0,0,0,1};
+unsigned char checkMessage[8]={0,0,0,0,0,0,0,0};
+unsigned char i;
+
+void _delay_us(unsigned char delay)
+{
+ 	 for(;delay!=0;delay--)
+	 {};
+}
+
+void checkOut()
+{
+	for(i=0;i<=7;i++)
+	{
+		checkMessage[i]=guideMessage[i]|idMessage[i]|coordMessage[i];
+	}
+}
+
+
+/*******************************************************************************
+名称：void SPI1_Init()
+功能：模拟SPI时序的端口初始化工作
+参数：无
+时间：2011.1.11
+版本：1.0
+注意：无
+*******************************************************************************/
+void SPI1_Init()
+{
+ 	SPI1_Port|=((1<<SPI1_CS)|(1<<SPI1_MISO)|(1<<SPI1_MOSI)|(1<<SPI1_CLK));
+    SPI1_DDR|=(((1<<SPI1_CS)|(1<<SPI1_MOSI)|(1<<SPI1_CLK))&(~(1<<SPI1_MISO)));
+    SPI1_CS_H;
+    SPI1_CLK_L;
+    spi_delay=5;
+}
+
+/*******************************************************************************
+名称：SPI1_Send(unsigned char data)
+功能：发送SPI数据
+参数：unsigned char data
+时间：2011.1.11
+版本：1.0
+注意：无
+*******************************************************************************/
+//void SPI1_Send(unsigned char data)
+void SPI1_Send(unsigned char data[8])
+{
+    unsigned char i;
+   // SPI1_CS_L;      //拉低片选信号
+   // SPI1_CLK_L;     //时钟空闲时为低电平
+    SPI1_MOSI_L;
+  //  _delay_us(spi_delay);
+    for(i=0;i<8;i++)
+    {
+      //  if(data&(0x80>>i))//高位在前，低位在前改为(0x01<<i)
+	  	if(data[i]==0)  
+		{
+		 	 SPI1_MOSI_H;
+			_delay_us(3);
+			SPI1_MOSI_L;
+			_delay_us(1);											   
+		}   
+        else
+		{
+		 	SPI1_MOSI_H;
+			_delay_us(3);
+			SPI1_MOSI_L;
+			_delay_us(10);
+		}
+            
+      //  _delay_us(spi_delay);
+		
+      //  SPI1_CLK_H;     //在上升沿更新数据
+     //   _delay_us(spi_delay);
+      //  SPI1_CLK_L;
+    }
+  //  _delay_us(spi_delay);
+  //  SPI1_CS_H;      //拉高片选，完成一次数据传输
+}
+
+void setMessage()
+{
+	SPI1_Send(guideMessage);
+	SPI1_Send(idMessage);
+	SPI1_Send(coordMessage);
+	SPI1_Send(checkMessage);
+}
+
+void main(void)
+{   
+    unsigned char i=0;
+    DDRB=0XFF;
+    PORTB=0XFF;
+    SPI1_Init();
+	checkOut();
+    while(1)
+    {     
+	   setMessage();
+	  // SPI1_Send(guideMessage[8]);
+	  // SPI1_Send(guideMessage);
+    }
+}

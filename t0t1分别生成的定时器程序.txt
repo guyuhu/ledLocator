@@ -1,0 +1,183 @@
+/ICC-AVR application builder : 2015/6/25 10:51:13
+// Target : M16
+// Crystal: 12.000Mhz
+
+#include <iom16v.h>
+#include <macros.h>
+
+void port_init(void)
+{
+ PORTA = 0x00;
+ DDRA  = 0x00;
+ PORTB = 0x00;
+ DDRB  = 0x00;
+ PORTC = 0x00; //m103 output only
+ DDRC  = 0x00;
+ PORTD = 0x00;
+ DDRD  = 0x00;
+}
+
+//TIMER0 initialize - prescale:1024
+// WGM: Normal
+// desired value: 100Hz
+// actual value: 100.160Hz (0.2%)
+void timer0_init(void)
+{
+ TCCR0 = 0x00; //stop
+ TCNT0 = 0x8B; //set count
+ OCR0  = 0x75;  //set compare
+ TCCR0 = 0x05; //start timer
+}
+
+#pragma interrupt_handler timer0_ovf_isr:iv_TIM0_OVF
+void timer0_ovf_isr(void)
+{
+ TCNT0 = 0x8B; //reload counter value
+}
+
+//call this routine to initialize all peripherals
+void init_devices(void)
+{
+ //stop errant interrupts until set up
+ CLI(); //disable all interrupts
+ port_init();
+ timer0_init();
+
+ MCUCR = 0x00;
+ GICR  = 0x00;
+ TIMSK = 0x01; //timer interrupt sources
+ SEI(); //re-enable interrupts
+ //all peripherals are now initialized
+}
+
+
+
+
+
+
+
+//ICC-AVR application builder : 2015/6/25 11:00:50
+// Target : M16
+// Crystal: 12.000Mhz
+
+#include <iom16v.h>
+#include <macros.h>
+
+void port_init(void)
+{
+ PORTA = 0x00;
+ DDRA  = 0x00;
+ PORTB = 0x00;
+ DDRB  = 0x00;
+ PORTC = 0x00; //m103 output only
+ DDRC  = 0x00;
+ PORTD = 0x00;
+ DDRD  = 0x00;
+}
+
+//TIMER1 initialize - prescale:1024
+// WGM: 0) Normal, TOP=0xFFFF
+// desired value: 1Hz
+// actual value:  1.000Hz (0.0%)
+void timer1_init(void)
+{
+ TCCR1B = 0x00; //stop
+ TCNT1H = 0xD2; //setup
+ TCNT1L = 0x3A;
+ OCR1AH = 0x2D;
+ OCR1AL = 0xC6;
+ OCR1BH = 0x2D;
+ OCR1BL = 0xC6;
+ ICR1H  = 0x2D;
+ ICR1L  = 0xC6;
+ TCCR1A = 0x00;
+ TCCR1B = 0x05; //start Timer
+}
+
+#pragma interrupt_handler timer1_ovf_isr:iv_TIM1_OVF
+void timer1_ovf_isr(void)
+{
+ //TIMER1 has overflowed
+ TCNT1H = 0xD2; //reload counter high value
+ TCNT1L = 0x3A; //reload counter low value
+}
+
+//call this routine to initialize all peripherals
+void init_devices(void)
+{
+ //stop errant interrupts until set up
+ CLI(); //disable all interrupts
+ port_init();
+ timer1_init();
+
+ MCUCR = 0x00;
+ GICR  = 0x00;
+ TIMSK = 0x04; //timer interrupt sources
+ SEI(); //re-enable interrupts
+ //all peripherals are now initialized
+}
+
+
+
+//ICC-AVR application builder : 2015/6/25 11:38:33
+// Target : M16
+// Crystal: 12.000Mhz
+
+#include <iom16v.h>
+#include <macros.h>
+
+void port_init(void)
+{
+ PORTA = 0x00;
+ DDRA  = 0x00;
+ PORTB = 0x00;
+ DDRB  = 0x00;
+ PORTC = 0x00; //m103 output only
+ DDRC  = 0x00;
+ PORTD = 0x00;
+ DDRD  = 0x00;
+}
+
+//TIMER1 initialize - prescale:1024
+// WGM: 0) Normal, TOP=0xFFFF
+// desired value: 100Hz
+// actual value: 100.160Hz (0.2%)
+void timer1_init(void)
+{
+ TCCR1B = 0x00; //stop
+ TCNT1H = 0xFF; //setup
+ TCNT1L = 0x8B;
+ OCR1AH = 0x00;
+ OCR1AL = 0x75;
+ OCR1BH = 0x00;
+ OCR1BL = 0x75;
+ ICR1H  = 0x00;
+ ICR1L  = 0x75;
+ TCCR1A = 0x00;
+ TCCR1B = 0x05; //start Timer
+}
+
+#pragma interrupt_handler timer1_ovf_isr:iv_TIM1_OVF
+void timer1_ovf_isr(void)
+{
+ //TIMER1 has overflowed
+ TCNT1H = 0xFF; //reload counter high value
+ TCNT1L = 0x8B; //reload counter low value
+}
+
+//call this routine to initialize all peripherals
+void init_devices(void)
+{
+ //stop errant interrupts until set up
+ CLI(); //disable all interrupts
+ port_init();
+ timer1_init();
+
+ MCUCR = 0x00;
+ GICR  = 0x00;
+ TIMSK = 0x04; //timer interrupt sources
+ SEI(); //re-enable interrupts
+ //all peripherals are now initialized
+}
+
+
