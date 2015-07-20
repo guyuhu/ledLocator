@@ -58,9 +58,9 @@ FILE: E:\MCU\AVR\project\ledLocator\ledLoctor.c
 (0016) #define SPI1_MOSI_H (SPI1_Port|=(1<<SPI1_MOSI))
 (0017) #define SPI1_MOSI_L (SPI1_Port&=~(1<<SPI1_MOSI))
 (0018) 
-(0019) unsigned char guideMessage[8]={0,1,0,1,0,1,0,1};
-(0020) unsigned char idMessage[8]   ={0,0,0,0,0,0,0,1};
-(0021) unsigned char coordMessage[8]={0,0,0,0,0,0,0,1};
+(0019) unsigned char guideMessage[8]={1,1,1,1,1,1,1,1};
+(0020) unsigned char idMessage[8]   ={0,0,0,1,0,0,0,1};
+(0021) unsigned char coordMessage[8]={0,0,0,1,0,0,0,1};
 (0022) unsigned char checkMessage[8]={0,0,0,0,0,0,0,0};
 (0023) /*
 (0024) unsigned char guideMessage=0x01010101;
@@ -156,7 +156,7 @@ _checkOut:
 _SPI1_Send:
   i                    --> R10
   data                 --> R12
-    000A1 940E 013E CALL	push_xgset003C
+    000A1 940E 0136 CALL	push_xgset003C
     000A3 0168      MOVW	R12,R16
 (0054) 	}
 (0055) }
@@ -187,14 +187,14 @@ _SPI1_Send:
 (0070) 		{
 (0071) 		 	 SPI1_MOSI_H;
     000AE 9AC0      SBI	0x18,0
-(0072) 			_delay_us(2);
-    000AF E002      LDI	R16,2
+(0072) 			_delay_us(20);
+    000AF E104      LDI	R16,0x14
     000B0 E010      LDI	R17,0
     000B1 DFAD      RCALL	__delay_us
 (0073) 			SPI1_MOSI_L;
     000B2 98C0      CBI	0x18,0
-(0074) 			_delay_us(1);											   
-    000B3 E001      LDI	R16,1
+(0074) 			_delay_us(10);											   
+    000B3 E00A      LDI	R16,0xA
     000B4 E010      LDI	R17,0
     000B5 DFA9      RCALL	__delay_us
 (0075) 		}   
@@ -203,21 +203,21 @@ _SPI1_Send:
 (0077) 		{
 (0078) 		 	SPI1_MOSI_H;
     000B7 9AC0      SBI	0x18,0
-(0079) 			_delay_us(2);
-    000B8 E002      LDI	R16,2
+(0079) 			_delay_us(20);
+    000B8 E104      LDI	R16,0x14
     000B9 E010      LDI	R17,0
     000BA DFA4      RCALL	__delay_us
 (0080) 			SPI1_MOSI_L;
     000BB 98C0      CBI	0x18,0
-(0081) 			_delay_us(10);
-    000BC E00A      LDI	R16,0xA
+(0081) 			_delay_us(50);
+    000BC E302      LDI	R16,0x32
     000BD E010      LDI	R17,0
     000BE DFA0      RCALL	__delay_us
     000BF 94A3      INC	R10
     000C0 2D8A      MOV	R24,R10
     000C1 3088      CPI	R24,0x8
     000C2 F320      BCS	0x00A7
-    000C3 940C 0133 JMP	pop_xgset003C
+    000C3 940C 012B JMP	pop_xgset003C
 (0082) 		}
 (0083)     }
 (0084) }
@@ -232,14 +232,14 @@ _SPI1_Send:
 (0093)  	 SPI1_MOSI_H;		//	5单位高电平	标示数据帧开始，便于解析													
 _setMessage:
     000C5 9AC0      SBI	0x18,0
-(0094) 	_delay_us(10);
-    000C6 E00A      LDI	R16,0xA
+(0094) 	_delay_us(100);
+    000C6 E604      LDI	R16,0x64
     000C7 E010      LDI	R17,0
     000C8 DF96      RCALL	__delay_us
 (0095) 	SPI1_MOSI_L;
     000C9 98C0      CBI	0x18,0
-(0096) 	_delay_us(1);
-    000CA E001      LDI	R16,1
+(0096) 	_delay_us(10);
+    000CA E00A      LDI	R16,0xA
     000CB E010      LDI	R17,0
     000CC DF92      RCALL	__delay_us
 (0097) 	
@@ -262,14 +262,14 @@ _setMessage:
 (0102) 	
 (0103) 	SPI1_MOSI_H;			//	10单位高电平	标示数据帧结束，便于解析
     000D9 9AC0      SBI	0x18,0
-(0104) 	_delay_us(20);
-    000DA E104      LDI	R16,0x14
+(0104) 	_delay_us(150);
+    000DA E906      LDI	R16,0x96
     000DB E010      LDI	R17,0
     000DC DF82      RCALL	__delay_us
 (0105) 	SPI1_MOSI_L;
     000DD 98C0      CBI	0x18,0
-(0106) 	_delay_us(1);
-    000DE E001      LDI	R16,1
+(0106) 	_delay_us(10);
+    000DE E00A      LDI	R16,0xA
     000DF E010      LDI	R17,0
     000E0 CF7E      RJMP	__delay_us
 (0107) }
@@ -363,73 +363,70 @@ _timer0_ovf_isr:
     00108 923A      ST	-Y,R3
     00109 938A      ST	-Y,R24
     0010A 939A      ST	-Y,R25
-    0010B 93AA      ST	-Y,R26
-    0010C 93EA      ST	-Y,R30
-    0010D B62F      IN	R2,0x3F
-    0010E 922A      ST	-Y,R2
+    0010B B62F      IN	R2,0x3F
+    0010C 922A      ST	-Y,R2
 (0154) 		  }
-(0155)     }
-(0156) }
-(0157) 
-(0158) #pragma interrupt_handler timer0_ovf_isr:iv_TIM0_OVF
-(0159) void timer0_ovf_isr(void)
-(0160) {
-(0161)  	 TCNT0 = 0x8B; //reload counter value
-    0010F E88B      LDI	R24,0x8B
-    00110 BF82      OUT	0x32,R24
-(0162) 	 addTime++;
-    00111 9180 0080 LDS	R24,addTime
-    00113 9190 0081 LDS	R25,addTime+1
-    00115 9601      ADIW	R24,1
-    00116 9390 0081 STS	addTime+1,R25
-    00118 9380 0080 STS	addTime,R24
-(0163) 	 if(addTime==100)
-    0011A 3684      CPI	R24,0x64
-    0011B E0E0      LDI	R30,0
-    0011C 079E      CPC	R25,R30
-    0011D F461      BNE	0x012A
-(0164) 	 {
-(0165) 	  	endlineFlag=1;
-    0011E E081      LDI	R24,1
-    0011F 9380 0082 STS	endlineFlag,R24
-(0166) 		addTime=0;
-    00121 2422      CLR	R2
-    00122 2433      CLR	R3
-    00123 9230 0081 STS	addTime+1,R3
-    00125 9220 0080 STS	addTime,R2
-(0167) 		PORTB&=0xfb;  //用个小灯来显示，如果出现闪说明进入了中断。
-    00127 B388      IN	R24,0x18
-    00128 7F8B      ANDI	R24,0xFB
-    00129 BB88      OUT	0x18,R24
-(0168) 	 }
+(0155) 		 // PORTB|=0x01;
+(0156)     }
+(0157) }
+(0158) 
+(0159) #pragma interrupt_handler timer0_ovf_isr:iv_TIM0_OVF
+(0160) void timer0_ovf_isr(void)
+(0161) {
+(0162)  	 TCNT0 = 0x8B; //reload counter value
+    0010D E88B      LDI	R24,0x8B
+    0010E BF82      OUT	0x32,R24
+(0163) 	 addTime++;
+    0010F 9180 0080 LDS	R24,addTime
+    00111 9190 0081 LDS	R25,addTime+1
+    00113 9601      ADIW	R24,1
+    00114 9390 0081 STS	addTime+1,R25
+    00116 9380 0080 STS	addTime,R24
+(0164) 	/* if(addTime==100)
+(0165) 	 {
+(0166) 	  	endlineFlag=1;
+(0167) 		addTime=0;
+(0168) 		PORTB&=0xfb;  //用个小灯来显示，如果出现闪说明进入了中断。
+(0169) 	 }
+(0170) 	 */
+(0171) 	 endlineFlag=1;
+    00118 E081      LDI	R24,1
+    00119 9380 0082 STS	endlineFlag,R24
+(0172) 		addTime=0;
+    0011B 2422      CLR	R2
+    0011C 2433      CLR	R3
+    0011D 9230 0081 STS	addTime+1,R3
+    0011F 9220 0080 STS	addTime,R2
+(0173) 		PORTB&=0xfb;  //用个小灯来显示，如果出现闪说明进入了中断。
 FILE: <library>
-    0012A 9029      LD	R2,Y+
-    0012B BE2F      OUT	0x3F,R2
-    0012C 91E9      LD	R30,Y+
-    0012D 91A9      LD	R26,Y+
-    0012E 9199      LD	R25,Y+
-    0012F 9189      LD	R24,Y+
-    00130 9039      LD	R3,Y+
-    00131 9029      LD	R2,Y+
-    00132 9518      RETI
+    00121 B388      IN	R24,0x18
+    00122 7F8B      ANDI	R24,0xFB
+    00123 BB88      OUT	0x18,R24
+    00124 9029      LD	R2,Y+
+    00125 BE2F      OUT	0x3F,R2
+    00126 9199      LD	R25,Y+
+    00127 9189      LD	R24,Y+
+    00128 9039      LD	R3,Y+
+    00129 9029      LD	R2,Y+
+    0012A 9518      RETI
 pop_xgset003C:
-    00133 90A9      LD	R10,Y+
-    00134 90B9      LD	R11,Y+
-    00135 90C9      LD	R12,Y+
-    00136 90D9      LD	R13,Y+
-    00137 9508      RET
+    0012B 90A9      LD	R10,Y+
+    0012C 90B9      LD	R11,Y+
+    0012D 90C9      LD	R12,Y+
+    0012E 90D9      LD	R13,Y+
+    0012F 9508      RET
 push_xgsetF0FC:
-    00138 937A      ST	-Y,R23
-    00139 936A      ST	-Y,R22
+    00130 937A      ST	-Y,R23
+    00131 936A      ST	-Y,R22
 push_xgset30FC:
-    0013A 935A      ST	-Y,R21
-    0013B 934A      ST	-Y,R20
+    00132 935A      ST	-Y,R21
+    00133 934A      ST	-Y,R20
 push_xgset00FC:
-    0013C 92FA      ST	-Y,R15
-    0013D 92EA      ST	-Y,R14
+    00134 92FA      ST	-Y,R15
+    00135 92EA      ST	-Y,R14
 push_xgset003C:
-    0013E 92DA      ST	-Y,R13
-    0013F 92CA      ST	-Y,R12
-    00140 92BA      ST	-Y,R11
-    00141 92AA      ST	-Y,R10
-    00142 9508      RET
+    00136 92DA      ST	-Y,R13
+    00137 92CA      ST	-Y,R12
+    00138 92BA      ST	-Y,R11
+    00139 92AA      ST	-Y,R10
+    0013A 9508      RET

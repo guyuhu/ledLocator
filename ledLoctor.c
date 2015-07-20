@@ -16,9 +16,9 @@
 #define SPI1_MOSI_H (SPI1_Port|=(1<<SPI1_MOSI))
 #define SPI1_MOSI_L (SPI1_Port&=~(1<<SPI1_MOSI))
 
-unsigned char guideMessage[8]={0,1,0,1,0,1,0,1};
-unsigned char idMessage[8]   ={0,0,0,0,0,0,0,1};
-unsigned char coordMessage[8]={0,0,0,0,0,0,0,1};
+unsigned char guideMessage[8]={1,1,1,1,1,1,1,1};
+unsigned char idMessage[8]   ={0,0,0,1,0,0,0,1};
+unsigned char coordMessage[8]={0,0,0,1,0,0,0,1};
 unsigned char checkMessage[8]={0,0,0,0,0,0,0,0};
 /*
 unsigned char guideMessage=0x01010101;
@@ -69,16 +69,16 @@ void SPI1_Send(unsigned char data[8])
 	  	if(data[i]==0) 
 		{
 		 	 SPI1_MOSI_H;
-			_delay_us(2);
+			_delay_us(20);
 			SPI1_MOSI_L;
-			_delay_us(1);											   
+			_delay_us(10);											   
 		}   
         else
 		{
 		 	SPI1_MOSI_H;
-			_delay_us(2);
+			_delay_us(20);
 			SPI1_MOSI_L;
-			_delay_us(10);
+			_delay_us(50);
 		}
     }
 }
@@ -91,9 +91,9 @@ void setMessage()
 {
 
  	 SPI1_MOSI_H;		//	5单位高电平	标示数据帧开始，便于解析													
-	_delay_us(10);
+	_delay_us(100);
 	SPI1_MOSI_L;
-	_delay_us(1);
+	_delay_us(10);
 	
 	SPI1_Send(guideMessage);
 	SPI1_Send(idMessage);
@@ -101,9 +101,9 @@ void setMessage()
 	SPI1_Send(checkMessage);
 	
 	SPI1_MOSI_H;			//	10单位高电平	标示数据帧结束，便于解析
-	_delay_us(20);
+	_delay_us(150);
 	SPI1_MOSI_L;
-	_delay_us(1);
+	_delay_us(10);
 }
 
 // Target : M16
@@ -152,6 +152,7 @@ void main(void)
 			endlineFlag=0;	
 			PORTB|=0x04;				
 		  }
+		 // PORTB|=0x01;
     }
 }
 
@@ -160,10 +161,14 @@ void timer0_ovf_isr(void)
 {
  	 TCNT0 = 0x8B; //reload counter value
 	 addTime++;
-	 if(addTime==100)
+	/* if(addTime==100)
 	 {
 	  	endlineFlag=1;
 		addTime=0;
 		PORTB&=0xfb;  //用个小灯来显示，如果出现闪说明进入了中断。
 	 }
+	 */
+	 endlineFlag=1;
+		addTime=0;
+		PORTB&=0xfb;  //用个小灯来显示，如果出现闪说明进入了中断。
 }

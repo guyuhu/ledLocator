@@ -16,7 +16,7 @@
 #define SPI1_MOSI_H (SPI1_Port|=(1<<SPI1_MOSI))
 #define SPI1_MOSI_L (SPI1_Port&=~(1<<SPI1_MOSI))
 
-unsigned char guideMessage[8]={1,1,1,1,1,1,1,1};
+unsigned char guideMessage[8]={0,0,0,0,0,0,0,0};
 unsigned char idMessage[8]   ={0,0,0,0,0,0,0,1};
 unsigned char coordMessage[8]={0,0,0,0,0,0,0,1};
 unsigned char checkMessage[8]={0,0,0,0,0,0,0,0};

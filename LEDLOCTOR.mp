@@ -12,7 +12,7 @@ Area                               Addr   Size   Decimal Bytes (Attributes)
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                            text   0078   020E =    526. bytes (rel,con,rom)
+                            text   0078   01FE =    510. bytes (rel,con,rom)
 
        Addr  Global Symbol
       -----  --------------------------------
@@ -27,12 +27,12 @@ Area                               Addr   Size   Decimal Bytes (Attributes)
        00E8  _init_devices
        00F9  _main
        0107  _timer0_ovf_isr
-       0133  pop_xgset003C
-       0138  push_xgsetF0FC
-       013A  push_xgset30FC
-       013C  push_xgset00FC
-       013E  push_xgset003C
-       0143  __text_end
+       012B  pop_xgset003C
+       0130  push_xgsetF0FC
+       0132  push_xgset30FC
+       0134  push_xgset00FC
+       0136  push_xgset003C
+       013B  __text_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------

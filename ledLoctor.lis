@@ -6,22 +6,22 @@
  0000           _guideMessage::
  0000                   .blkb 2
                         .area idata
- 0000 0001              .byte 0,1
+ 0000 0101              .byte 1,1
                         .area data(ram, con, rel)
  0002                   .dbfile ledLoctor.c
  0002                   .blkb 2
                         .area idata
- 0002 0001              .byte 0,1
+ 0002 0101              .byte 1,1
                         .area data(ram, con, rel)
  0004                   .dbfile ledLoctor.c
  0004                   .blkb 2
                         .area idata
- 0004 0001              .byte 0,1
+ 0004 0101              .byte 1,1
                         .area data(ram, con, rel)
  0006                   .dbfile ledLoctor.c
  0006                   .blkb 2
                         .area idata
- 0006 0001              .byte 0,1
+ 0006 0101              .byte 1,1
                         .area data(ram, con, rel)
  0008                   .dbfile ledLoctor.c
  0008                   .dbfile E:\MCU\AVR\project\ledLocator\ledLoctor.c
@@ -34,7 +34,7 @@
  000A                   .dbfile E:\MCU\AVR\project\ledLocator\ledLoctor.c
  000A                   .blkb 2
                         .area idata
- 000A 0000              .byte 0,0
+ 000A 0001              .byte 0,1
                         .area data(ram, con, rel)
  000C                   .dbfile E:\MCU\AVR\project\ledLocator\ledLoctor.c
  000C                   .blkb 2
@@ -56,7 +56,7 @@
  0012                   .dbfile E:\MCU\AVR\project\ledLocator\ledLoctor.c
  0012                   .blkb 2
                         .area idata
- 0012 0000              .byte 0,0
+ 0012 0001              .byte 0,1
                         .area data(ram, con, rel)
  0014                   .dbfile E:\MCU\AVR\project\ledLocator\ledLoctor.c
  0014                   .blkb 2
@@ -132,9 +132,9 @@
  0000           ; #define SPI1_MOSI_H (SPI1_Port|=(1<<SPI1_MOSI))
  0000           ; #define SPI1_MOSI_L (SPI1_Port&=~(1<<SPI1_MOSI))
  0000           ; 
- 0000           ; unsigned char guideMessage[8]={0,1,0,1,0,1,0,1};
- 0000           ; unsigned char idMessage[8]   ={0,0,0,0,0,0,0,1};
- 0000           ; unsigned char coordMessage[8]={0,0,0,0,0,0,0,1};
+ 0000           ; unsigned char guideMessage[8]={1,1,1,1,1,1,1,1};
+ 0000           ; unsigned char idMessage[8]   ={0,0,0,1,0,0,0,1};
+ 0000           ; unsigned char coordMessage[8]={0,0,0,1,0,0,0,1};
  0000           ; unsigned char checkMessage[8]={0,0,0,0,0,0,0,0};
  0000           ; /*
  0000           ; unsigned char guideMessage=0x01010101;
@@ -309,16 +309,16 @@
  009E           ;                        SPI1_MOSI_H;
  009E C09A              sbi 0x18,0
  00A0                   .dbline 72
- 00A0           ;                       _delay_us(2);
- 00A0 02E0              ldi R16,2
+ 00A0           ;                       _delay_us(20);
+ 00A0 04E1              ldi R16,20
  00A2 10E0              ldi R17,0
  00A4 ADDF              xcall __delay_us
  00A6                   .dbline 73
  00A6           ;                       SPI1_MOSI_L;
  00A6 C098              cbi 0x18,0
  00A8                   .dbline 74
- 00A8           ;                       _delay_us(1);                                                                                      
- 00A8 01E0              ldi R16,1
+ 00A8           ;                       _delay_us(10);                                                                                     
+ 00A8 0AE0              ldi R16,10
  00AA 10E0              ldi R17,0
  00AC A9DF              xcall __delay_us
  00AE                   .dbline 75
@@ -332,16 +332,16 @@
  00B0           ;                       SPI1_MOSI_H;
  00B0 C09A              sbi 0x18,0
  00B2                   .dbline 79
- 00B2           ;                       _delay_us(2);
- 00B2 02E0              ldi R16,2
+ 00B2           ;                       _delay_us(20);
+ 00B2 04E1              ldi R16,20
  00B4 10E0              ldi R17,0
  00B6 A4DF              xcall __delay_us
  00B8                   .dbline 80
  00B8           ;                       SPI1_MOSI_L;
  00B8 C098              cbi 0x18,0
  00BA                   .dbline 81
- 00BA           ;                       _delay_us(10);
- 00BA 0AE0              ldi R16,10
+ 00BA           ;                       _delay_us(50);
+ 00BA 02E3              ldi R16,50
  00BC 10E0              ldi R17,0
  00BE A0DF              xcall __delay_us
  00C0                   .dbline 82
@@ -383,16 +383,16 @@
  00CC           ;        SPI1_MOSI_H;           //      5单位高电平     标示数据帧开始，便于解析                                                                                                        
  00CC C09A              sbi 0x18,0
  00CE                   .dbline 94
- 00CE           ;       _delay_us(10);
- 00CE 0AE0              ldi R16,10
+ 00CE           ;       _delay_us(100);
+ 00CE 04E6              ldi R16,100
  00D0 10E0              ldi R17,0
  00D2 96DF              xcall __delay_us
  00D4                   .dbline 95
  00D4           ;       SPI1_MOSI_L;
  00D4 C098              cbi 0x18,0
  00D6                   .dbline 96
- 00D6           ;       _delay_us(1);
- 00D6 01E0              ldi R16,1
+ 00D6           ;       _delay_us(10);
+ 00D6 0AE0              ldi R16,10
  00D8 10E0              ldi R17,0
  00DA 92DF              xcall __delay_us
  00DC                   .dbline 98
@@ -421,16 +421,16 @@
  00F4           ;       SPI1_MOSI_H;                    //      10单位高电平    标示数据帧结束，便于解析
  00F4 C09A              sbi 0x18,0
  00F6                   .dbline 104
- 00F6           ;       _delay_us(20);
- 00F6 04E1              ldi R16,20
+ 00F6           ;       _delay_us(150);
+ 00F6 06E9              ldi R16,150
  00F8 10E0              ldi R17,0
  00FA 82DF              xcall __delay_us
  00FC                   .dbline 105
  00FC           ;       SPI1_MOSI_L;
  00FC C098              cbi 0x18,0
  00FE                   .dbline 106
- 00FE           ;       _delay_us(1);
- 00FE 01E0              ldi R16,1
+ 00FE           ;       _delay_us(10);
+ 00FE 0AE0              ldi R16,10
  0100 10E0              ldi R17,0
  0102                   .dbline -2
  0102           L21:
@@ -567,7 +567,8 @@
  014C                   .dbline 154
  014C           ;                 }
  014C           L28:
- 014C                   .dbline 155
+ 014C                   .dbline 156
+ 014C           ;                // PORTB|=0x01;
  014C           ;     }
  014C           L26:
  014C                   .dbline 147
@@ -590,68 +591,59 @@
  0152 3A92              st -y,R3
  0154 8A93              st -y,R24
  0156 9A93              st -y,R25
- 0158 AA93              st -y,R26
- 015A EA93              st -y,R30
- 015C 2FB6              IN R2,63
- 015E 2A92              st -y,R2
- 0160                   .dbline -1
- 0160                   .dbline 160
- 0160           ; }
- 0160           ; 
- 0160           ; #pragma interrupt_handler timer0_ovf_isr:iv_TIM0_OVF
- 0160           ; void timer0_ovf_isr(void)
- 0160           ; {
- 0160                   .dbline 161
- 0160           ;        TCNT0 = 0x8B; //reload counter value
- 0160 8BE8              ldi R24,139
- 0162 82BF              out 0x32,R24
- 0164                   .dbline 162
- 0164           ;        addTime++;
- 0164 80912000          lds R24,_addTime
- 0168 90912100          lds R25,_addTime+1
- 016C 0196              adiw R24,1
- 016E 90932100          sts _addTime+1,R25
- 0172 80932000          sts _addTime,R24
- 0176                   .dbline 163
- 0176           ;        if(addTime==100)
- 0176 8436              cpi R24,100
- 0178 E0E0              ldi R30,0
- 017A 9E07              cpc R25,R30
- 017C 61F4              brne L31
- 017E           X7:
- 017E                   .dbline 164
- 017E           ;        {
- 017E                   .dbline 165
- 017E           ;               endlineFlag=1;
- 017E 81E0              ldi R24,1
- 0180 80932200          sts _endlineFlag,R24
- 0184                   .dbline 166
- 0184           ;               addTime=0;
- 0184 2224              clr R2
- 0186 3324              clr R3
- 0188 30922100          sts _addTime+1,R3
- 018C 20922000          sts _addTime,R2
- 0190                   .dbline 167
- 0190           ;               PORTB&=0xfb;  //用个小灯来显示，如果出现闪说明进入了中断。
- 0190 88B3              in R24,0x18
- 0192 8B7F              andi R24,251
- 0194 88BB              out 0x18,R24
- 0196                   .dbline 168
- 0196           ;        }
- 0196           L31:
- 0196                   .dbline -2
- 0196           L30:
- 0196                   .dbline 0 ; func end
- 0196 2990              ld R2,y+
- 0198 2FBE              OUT 63,R2
- 019A E991              ld R30,y+
- 019C A991              ld R26,y+
- 019E 9991              ld R25,y+
- 01A0 8991              ld R24,y+
- 01A2 3990              ld R3,y+
- 01A4 2990              ld R2,y+
- 01A6 1895              reti
- 01A8                   .dbend
+ 0158 2FB6              IN R2,63
+ 015A 2A92              st -y,R2
+ 015C                   .dbline -1
+ 015C                   .dbline 161
+ 015C           ; }
+ 015C           ; 
+ 015C           ; #pragma interrupt_handler timer0_ovf_isr:iv_TIM0_OVF
+ 015C           ; void timer0_ovf_isr(void)
+ 015C           ; {
+ 015C                   .dbline 162
+ 015C           ;        TCNT0 = 0x8B; //reload counter value
+ 015C 8BE8              ldi R24,139
+ 015E 82BF              out 0x32,R24
+ 0160                   .dbline 163
+ 0160           ;        addTime++;
+ 0160 80912000          lds R24,_addTime
+ 0164 90912100          lds R25,_addTime+1
+ 0168 0196              adiw R24,1
+ 016A 90932100          sts _addTime+1,R25
+ 016E 80932000          sts _addTime,R24
+ 0172                   .dbline 171
+ 0172           ;       /* if(addTime==100)
+ 0172           ;        {
+ 0172           ;               endlineFlag=1;
+ 0172           ;               addTime=0;
+ 0172           ;               PORTB&=0xfb;  //用个小灯来显示，如果出现闪说明进入了中断。
+ 0172           ;        }
+ 0172           ;        */
+ 0172           ;        endlineFlag=1;
+ 0172 81E0              ldi R24,1
+ 0174 80932200          sts _endlineFlag,R24
+ 0178                   .dbline 172
+ 0178           ;               addTime=0;
+ 0178 2224              clr R2
+ 017A 3324              clr R3
+ 017C 30922100          sts _addTime+1,R3
+ 0180 20922000          sts _addTime,R2
+ 0184                   .dbline 173
+ 0184           ;               PORTB&=0xfb;  //用个小灯来显示，如果出现闪说明进入了中断。
+ 0184 88B3              in R24,0x18
+ 0186 8B7F              andi R24,251
+ 0188 88BB              out 0x18,R24
+ 018A                   .dbline -2
+ 018A           L30:
+ 018A                   .dbline 0 ; func end
+ 018A 2990              ld R2,y+
+ 018C 2FBE              OUT 63,R2
+ 018E 9991              ld R25,y+
+ 0190 8991              ld R24,y+
+ 0192 3990              ld R3,y+
+ 0194 2990              ld R2,y+
+ 0196 1895              reti
+ 0198                   .dbend
                         .area bss(ram, con, rel)
  0000                   .dbfile E:\MCU\AVR\project\ledLocator\ledLoctor.c
  0000           _i::

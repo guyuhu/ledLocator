@@ -16,7 +16,7 @@
 #define SPI1_MOSI_H (SPI1_Port|=(1<<SPI1_MOSI))
 #define SPI1_MOSI_L (SPI1_Port&=~(1<<SPI1_MOSI))
 
-unsigned char guideMessage[8]={1,1,1,1,1,1,1,1};
+unsigned char guideMessage[8]={0,1,0,1,0,1,0,1};
 unsigned char idMessage[8]   ={0,0,0,0,0,0,0,1};
 unsigned char coordMessage[8]={0,0,0,0,0,0,0,1};
 unsigned char checkMessage[8]={0,0,0,0,0,0,0,0};
@@ -161,14 +161,10 @@ void timer0_ovf_isr(void)
 {
  	 TCNT0 = 0x8B; //reload counter value
 	 addTime++;
-	/* if(addTime==100)
+	 if(addTime==100)
 	 {
 	  	endlineFlag=1;
 		addTime=0;
 		PORTB&=0xfb;  //用个小灯来显示，如果出现闪说明进入了中断。
 	 }
-	 */
-	 endlineFlag=1;
-		addTime=0;
-		PORTB&=0xfb;  //用个小灯来显示，如果出现闪说明进入了中断。
 }
