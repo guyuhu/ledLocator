@@ -58,7 +58,7 @@ FILE: E:\MCU\AVR\project\ledLocator\ledLoctor.c
 (0016) #define SPI1_MOSI_H (SPI1_Port|=(1<<SPI1_MOSI))
 (0017) #define SPI1_MOSI_L (SPI1_Port&=~(1<<SPI1_MOSI))
 (0018) 
-(0019) unsigned char guideMessage[8]={1,1,1,1,1,1,1,1};
+(0019) unsigned char guideMessage[8]={1,0,1,0,1,0,1,0};
 (0020) unsigned char idMessage[8]   ={0,0,0,1,0,0,0,1};
 (0021) unsigned char coordMessage[8]={0,0,0,1,0,0,0,1};
 (0022) unsigned char checkMessage[8]={0,0,0,0,0,0,0,0};
@@ -113,7 +113,7 @@ _checkOut:
     00073 9220 0083 STS	i,R2
     00075 C025      RJMP	0x009B
 (0052) 	{
-(0053) 		checkMessage[i]=guideMessage[i]|idMessage[i]|coordMessage[i];
+(0053) 		checkMessage[i]=guideMessage[i]^idMessage[i]^coordMessage[i];
     00076 9040 0083 LDS	R4,i
     00078 E688      LDI	R24,0x68
     00079 E090      LDI	R25,0
@@ -129,7 +129,7 @@ _checkOut:
     00083 0FE8      ADD	R30,R24
     00084 1FF9      ADC	R31,R25
     00085 8030      LD	R3,Z
-    00086 2832      OR	R3,R2
+    00086 2432      EOR	R3,R2
     00087 E780      LDI	R24,0x70
     00088 E090      LDI	R25,0
     00089 2DE4      MOV	R30,R4
@@ -137,7 +137,7 @@ _checkOut:
     0008B 0FE8      ADD	R30,R24
     0008C 1FF9      ADC	R31,R25
     0008D 8020      LD	R2,Z
-    0008E 2832      OR	R3,R2
+    0008E 2432      EOR	R3,R2
     0008F E788      LDI	R24,0x78
     00090 E090      LDI	R25,0
     00091 2DE4      MOV	R30,R4

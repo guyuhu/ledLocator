@@ -6,22 +6,22 @@
  0000           _guideMessage::
  0000                   .blkb 2
                         .area idata
- 0000 0101              .byte 1,1
+ 0000 0100              .byte 1,0
                         .area data(ram, con, rel)
  0002                   .dbfile ledLoctor.c
  0002                   .blkb 2
                         .area idata
- 0002 0101              .byte 1,1
+ 0002 0100              .byte 1,0
                         .area data(ram, con, rel)
  0004                   .dbfile ledLoctor.c
  0004                   .blkb 2
                         .area idata
- 0004 0101              .byte 1,1
+ 0004 0100              .byte 1,0
                         .area data(ram, con, rel)
  0006                   .dbfile ledLoctor.c
  0006                   .blkb 2
                         .area idata
- 0006 0101              .byte 1,1
+ 0006 0100              .byte 1,0
                         .area data(ram, con, rel)
  0008                   .dbfile ledLoctor.c
  0008                   .dbfile E:\MCU\AVR\project\ledLocator\ledLoctor.c
@@ -132,7 +132,7 @@
  0000           ; #define SPI1_MOSI_H (SPI1_Port|=(1<<SPI1_MOSI))
  0000           ; #define SPI1_MOSI_L (SPI1_Port&=~(1<<SPI1_MOSI))
  0000           ; 
- 0000           ; unsigned char guideMessage[8]={1,1,1,1,1,1,1,1};
+ 0000           ; unsigned char guideMessage[8]={1,0,1,0,1,0,1,0};
  0000           ; unsigned char idMessage[8]   ={0,0,0,1,0,0,0,1};
  0000           ; unsigned char coordMessage[8]={0,0,0,1,0,0,0,1};
  0000           ; unsigned char checkMessage[8]={0,0,0,0,0,0,0,0};
@@ -212,7 +212,7 @@
  002E                   .dbline 52
  002E           ;       {
  002E                   .dbline 53
- 002E           ;               checkMessage[i]=guideMessage[i]|idMessage[i]|coordMessage[i];
+ 002E           ;               checkMessage[i]=guideMessage[i]^idMessage[i]^coordMessage[i];
  002E 40900000          lds R4,_i
  0032 80E0              ldi R24,<_idMessage
  0034 90E0              ldi R25,>_idMessage
@@ -228,7 +228,7 @@
  0048 E80F              add R30,R24
  004A F91F              adc R31,R25
  004C 3080              ldd R3,z+0
- 004E 3228              or R3,R2
+ 004E 3224              eor R3,R2
  0050 80E0              ldi R24,<_coordMessage
  0052 90E0              ldi R25,>_coordMessage
  0054 E42D              mov R30,R4
@@ -236,7 +236,7 @@
  0058 E80F              add R30,R24
  005A F91F              adc R31,R25
  005C 2080              ldd R2,z+0
- 005E 3228              or R3,R2
+ 005E 3224              eor R3,R2
  0060 80E0              ldi R24,<_checkMessage
  0062 90E0              ldi R25,>_checkMessage
  0064 E42D              mov R30,R4
